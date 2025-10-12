@@ -26,9 +26,24 @@ class FivbVis():
 
         return ''
 
-    def set_filter(self, filter):
-        if filter:
-            return f'<Filter {filter}/>'
+    def set_filter(self, filters):
+        if filters is None:
+            return ''
+
+        filter_str = []
+        for key, value in filters.items():
+            # Convert snake_case to PascalCase for the XML attribute names
+            xml_key = ''.join(word.capitalize() for word in key.split('_'))
+            filter_str.append(f'{xml_key}="{value}"')
+
+        # Combine all attributes
+        if len(filter_str) > 0:
+            filter_str = ' '.join(filter_str)
+        else:
+            filter_str = ''
+
+        if filter_str:
+            return f'<Filter {filter_str}/>'
 
         return ''
 
@@ -39,18 +54,42 @@ class FivbVis():
 
         return ''
 
-    def get(self, request_type, no, fields, content_type='xml'):
-        fields = self.set_fields(fields)
+    def set_attributes(self, attributes):
+        # Build attributes from kwargs
+        attributes_str = []
+        for key, value in attributes.items():
+            # Convert snake_case to PascalCase for the XML attribute names
+            xml_key = ''.join(word.capitalize() for word in key.split('_'))
+            attributes_str.append(f'{xml_key}="{value}"')
 
-        url = self.base_url + f'<Request Type="{request_type}" No="{no}" {fields}/>'
-        return self.make_request(url, request_type, content_type)
+        # Combine all attributes
+        if len(attributes_str) > 0:
+            all_attributes = ' '.join(attributes_str)
+        else:
+            all_attributes = ''
+        
+        return all_attributes
 
-    def get_list(self, request_type, fields, filter, content_type='xml'):
-        fields = self.set_fields(fields)
-        filter = self.set_filter(filter)
+    def get(self, request_type, fields=None, filters=None, content_type='xml', new_format=False, **kwargs):
+        
+        filter_str = self.set_filter(filters)
+        fields_str = self.set_fields(fields)       
+        all_attributes = self.set_attributes(kwargs)
+        all_attributes = all_attributes + ' ' + fields_str
 
-        url = self.base_url + f'<Request Type="{request_type}" {fields}> {filter}</Request>'
-        return self.make_request(url, request_type, content_type)
+
+        if filters:
+            url = self.base_url + f'<Request Type="{request_type}" {all_attributes}>{filter_str}</Request>'
+        else:
+            url = self.base_url + f'<Request Type="{request_type}" {all_attributes}/>'
+        
+        print(url)
+        result = self.make_request(url, request_type, content_type)
+
+        if content_type == 'json':
+            result = json.loads(result)
+
+        return result
 
     def get_list_with_tags(self, request_type, fields, tags, content_type='xml'):
         fields = self.set_fields(fields)
