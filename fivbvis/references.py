@@ -5,43 +5,38 @@ class Article(FivbVis):
         self.fivb_vis = FivbVis()
 
     def getArticle(self, no, fields=None, content_type='xml'):
-        result = self.fivb_vis.get('GetArticle', fields=fields, content_type=content_type, no=no)
-        return result
+        return self.fivb_vis.get('GetArticle', fields=fields, content_type=content_type, no=no)
 
     def getArticleListWithFilter(self, fields=None, filter=None, content_type='xml'):
-        result = self.fivb_vis.get_list('GetArticleList', fields, filter, content_type)
-        return result
+        return self.fivb_vis.get_list('GetArticleList', fields, filter, content_type)
 
     def getArticleListWithTags(self, fields=None, tags=None, content_type='xml'):
-        result = self.fivb_vis.get_list_with_tags('GetArticleList', fields, tags, content_type)
-        return result
+        return self.fivb_vis.get_list_with_tags('GetArticleList', fields, tags, content_type)
 
 class Beach(FivbVis):
     def __init__(self):
         self.fivb_vis = FivbVis()
 
     def getBeachMatch(self, no, fields=None, content_type='xml'):
-        result = self.fivb_vis.get('GetBeachMatch', fields=fields, content_type=content_type, no=no)
-        return result
+        return self.fivb_vis.get('GetBeachMatch', fields=fields, content_type=content_type, no=no)
 
     def getBeachMatchList(self, fields, filter=None, content_type='xml'):
-        result = self.fivb_vis.get_list('GetBeachMatchList', fields, filter, content_type)
-        return result
+        return self.fivb_vis.get_list('GetBeachMatchList', fields, filter, content_type)
 
-    def getBeachOlympicSelectionRanking():
-        return
+    def getBeachOlympicSelectionRanking(self):
+        raise NotImplementedError("Method not yet implemented")
 
-    def getBeachRound():
-        return
+    def getBeachRound(self):
+        raise NotImplementedError("Method not yet implemented")
 
-    def getBeachRoundList():
-        return
+    def getBeachRoundList(self):
+        raise NotImplementedError("Method not yet implemented")
 
-    def getBeachRoundRanking():
-        return
+    def getBeachRoundRanking(self):
+        raise NotImplementedError("Method not yet implemented")
 
-    def getBeachTeam():
-        return
+    def getBeachTeam(self):
+        raise NotImplementedError("Method not yet implemented")
 
     def getBeachTeamList(self, no_tournament, plays_in_main_draw=False, fields=None, content_type='json'):
         """Does the same as getBeachTournamentRanking method should be doing. It returns the ranking of all the teams for a given tournament.
@@ -74,20 +69,16 @@ class Beach(FivbVis):
                 Player2FirstName Player2LastName
             """
             
+        # Build filters
         filters = {}
         if no_tournament is not None:
             filters['no_tournament'] = no_tournament
-        
         if plays_in_main_draw:
             filters['plays_in_main_draw'] = 'true'
-
-        if len(filters) == 0:
-            filters = None
         
-        request_type = 'GetBeachTeamList'
-        result = self.fivb_vis.get(request_type, fields=fields, content_type=content_type, filters=filters)
+        filters = filters if filters else None
         
-        return result
+        return self.fivb_vis.get('GetBeachTeamList', fields=fields, content_type=content_type, filters=filters)
 
     def getBeachTournament(self, no, fields=None, content_type='json'):
         """Get beach tournaments.
@@ -109,13 +100,8 @@ class Beach(FivbVis):
                 Status Gender
             """
         
-        if no is None:
-            request_type = 'GetBeachTournamentList'
-            result = self.fivb_vis.get(request_type, fields=fields, content_type=content_type)
-        else:
-            request_type = 'GetBeachTournament'
-            result = self.fivb_vis.get(request_type, fields=fields, content_type=content_type, no=no)
-        return result
+        request_type = 'GetBeachTournamentList' if no is None else 'GetBeachTournament'
+        return self.fivb_vis.get(request_type, fields=fields, content_type=content_type, no=no)
 
     def getBeachTournamentRanking(self):
         raise NotImplementedError("This method is not working anymore on VIS Web Service: https://www.fivb.org/VisSDK/VisWebService/RequestList.html")
@@ -146,22 +132,15 @@ class Player(FivbVis):
                 Nationality ActiveBeach ActiveVolley 
                 PlaysBeach PlaysVolley TeamName Birthdate Height
             """
-        if no is None:
-            request_type = 'GetPlayerList'
-        else:
-            request_type = 'GetPlayer'
-
-        result = self.fivb_vis.get(request_type, fields=fields, content_type=content_type, no=no)
-        return result
+        request_type = 'GetPlayerList' if no is None else 'GetPlayer'
+        return self.fivb_vis.get(request_type, fields=fields, content_type=content_type, no=no)
 
 class Volleyball(FivbVis):
     def __init__(self):
         self.fivb_vis = FivbVis()
 
     def getVolleyMatch(self, no, fields=None, content_type='xml'):
-        result = self.fivb_vis.get('GetVolleyMatch', fields=fields, content_type=content_type, no=no)
-        return result
+        return self.fivb_vis.get('GetVolleyMatch', fields=fields, content_type=content_type, no=no)
 
     def getVolleyMatchList(self, fields=None, filter=None, content_type='xml'):
-        result = self.fivb_vis.get_list('GetVolleyMatchList', fields, filter, content_type)
-        return result
+        return self.fivb_vis.get_list('GetVolleyMatchList', fields, filter, content_type)

@@ -30,25 +30,17 @@ class FivbVis():
         return ''
 
     def set_filter(self, filters):
-        if filters is None:
+        if not filters:
             return ''
 
-        filter_str = []
+        filter_attributes = []
         for key, value in filters.items():
             # Convert snake_case to PascalCase for the XML attribute names
             xml_key = ''.join(word.capitalize() for word in key.split('_'))
-            filter_str.append(f'{xml_key}="{value}"')
+            filter_attributes.append(f'{xml_key}="{value}"')
 
-        # Combine all attributes
-        if len(filter_str) > 0:
-            filter_str = ' '.join(filter_str)
-        else:
-            filter_str = ''
-
-        if filter_str:
-            return f'<Filter {filter_str}/>'
-
-        return ''
+        filter_str = ' '.join(filter_attributes)
+        return f'<Filter {filter_str}/>'
 
     def set_tags(self, tags):
         if tags:
@@ -58,36 +50,36 @@ class FivbVis():
         return ''
 
     def set_attributes(self, attributes):
-        # Build attributes from kwargs
-        attributes_str = []
+        """Convert kwargs to XML attributes, converting snake_case to PascalCase."""
+        if not attributes:
+            return ''
+        
+        attributes_list = []
         for key, value in attributes.items():
-            # Convert snake_case to PascalCase for the XML attribute names
             xml_key = ''.join(word.capitalize() for word in key.split('_'))
-            attributes_str.append(f'{xml_key}="{value}"')
-
-        # Combine all attributes
-        if len(attributes_str) > 0:
-            all_attributes = ' '.join(attributes_str)
-        else:
-            all_attributes = ''
+            attributes_list.append(f'{xml_key}="{value}"')
         
-        return all_attributes
+        return ' '.join(attributes_list)
 
-    def get(self, request_type, fields=None, filters=None, content_type='xml', new_format=False, **kwargs):
-        
+    def get(self, request_type, fields=None, filters=None, content_type='xml', **kwargs):
+        """Make a GET request to the FIVB VIS Web Service."""
+        # Build all parts of the request
         filter_str = self.set_filter(filters)
-        fields_str = self.set_fields(fields)       
-        all_attributes = self.set_attributes(kwargs)
-        all_attributes = all_attributes + ' ' + fields_str
+        fields_str = self.set_fields(fields)
+        attributes_str = self.set_attributes(kwargs)
+        
+        # Combine attributes and fields
+        all_attributes = f'{attributes_str} {fields_str}'.strip()
 
+        # Build URL based on whether we have filters
         if filters:
             url = self.base_url + f'<Request Type="{request_type}" {all_attributes}>{filter_str}</Request>'
         else:
             url = self.base_url + f'<Request Type="{request_type}" {all_attributes}/>'
         
-        print(url)
         result = self.make_request(url, request_type, content_type)
 
+        # Parse JSON if needed
         if content_type == 'json':
             result = json.loads(result)
 

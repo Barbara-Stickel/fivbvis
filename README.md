@@ -42,6 +42,32 @@ The documentation is based on FIVB VIS Web Service requests. It is simple and in
 
 [This list contains all available requests via VIS web service](https://www.fivb.org/VisSDK/VisWebService/#RequestList.html); those with links are documented. Currently, this Python client is read-only.
 
+## Testing
+
+### Quick Verification
+
+To quickly verify that your API calls are working correctly:
+
+```bash
+python verify_api.py
+```
+
+This will test key API endpoints including beach tournaments, teams, and player data.
+
+### Running Tests
+
+```bash
+# Install test dependencies
+pip install -r requirements-dev.txt
+
+# Run unit tests (mocked, fast)
+pytest tests/test_references.py
+
+# Run integration tests (actual API calls)
+pytest tests/test_integration.py -v -s
+```
+
+See [tests/README.md](tests/README.md) for more details.
 
 ## Author
 

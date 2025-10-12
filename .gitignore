@@ -1,8 +1,14 @@
 # cache
 fivbvis/__pycache__
+.pytest_cache/
+__pycache__/
+*.pyc
 
 # test
 examples.py
+.coverage
+htmlcov/
+.pytest_cache/
 
 # build
 /dist/
