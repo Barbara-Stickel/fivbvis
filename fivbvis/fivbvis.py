@@ -22,7 +22,10 @@ class FivbVis():
 
     def set_fields(self, fields):
         if fields:
-            return f'Fields="{fields}"'
+            # Clean up multi-line strings and extra whitespace
+            # Split by any whitespace and rejoin with single spaces
+            cleaned_fields = ' '.join(fields.split())
+            return f'Fields="{cleaned_fields}"'
 
         return ''
 
@@ -76,7 +79,6 @@ class FivbVis():
         fields_str = self.set_fields(fields)       
         all_attributes = self.set_attributes(kwargs)
         all_attributes = all_attributes + ' ' + fields_str
-
 
         if filters:
             url = self.base_url + f'<Request Type="{request_type}" {all_attributes}>{filter_str}</Request>'

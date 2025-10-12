@@ -58,9 +58,6 @@ class Beach(FivbVis):
         - `NoPlayer1`: The number of the first player.
         - `NoPlayer2`: The number of the second player.
         - `Name`: The name of the team.
-        - `Rank`: The rank of the team.
-        - `EarnedPointsTeam`: The earned points of the team.
-        - `EarningsTeam`: The earnings of the team.
         - `NoTournament`: The number of the tournament.
 
         Documentation: https://www.fivb.org/VisSDK/VisWebService/GetBeachTeamList.html
@@ -69,8 +66,14 @@ class Beach(FivbVis):
         """
         if fields is None:
             # Use default fields
-            fields = 'No NoPlayer1 NoPlayer2 Name Rank EarnedPointsTeam EarningsTeam NoTournament Player1FirstName Player1LastName Player2FirstName Player2LastName'
-
+            fields = """
+                No NoPlayer1 NoPlayer2 NoTournament
+                Name Rank
+                EarnedPointsTeam EarningsTeam 
+                Player1FirstName Player1LastName
+                Player2FirstName Player2LastName
+            """
+            
         filters = {}
         if no_tournament is not None:
             filters['no_tournament'] = no_tournament
@@ -98,7 +101,13 @@ class Beach(FivbVis):
         """
         if fields is None:
             # Use default fields
-            fields = 'No Code Name Title Type CountryCode StartDateQualification StartDateMainDraw EndDateQualification EndDateMainDraw NbTeamsQualification NbTeamsFromQualification NbTeamsMainDraw Status Gender'
+            fields = """
+                No Code Name Title Type CountryCode
+                StartDateQualification StartDateMainDraw
+                EndDateQualification EndDateMainDraw
+                NbTeamsQualification NbTeamsFromQualification NbTeamsMainDraw
+                Status Gender
+            """
         
         if no is None:
             request_type = 'GetBeachTournamentList'
@@ -109,12 +118,8 @@ class Beach(FivbVis):
         return result
 
     def getBeachTournamentRanking(self):
-        """Get beach tournament ranking.
-        Not working anymore on VIS Web Service: https://www.fivb.org/VisSDK/VisWebService/RequestList.html
-        """
         raise NotImplementedError("This method is not working anymore on VIS Web Service: https://www.fivb.org/VisSDK/VisWebService/RequestList.html")
         
-
     def getBeachWorldTourRanking(self, gender, number, reference_date=None, fields=None, content_type='json'):
         raise NotImplementedError("This method is not working anymore on VIS Web Service: https://www.fivb.org/VisSDK/VisWebService/RequestList.html")
         
@@ -136,7 +141,11 @@ class Player(FivbVis):
         """
         if fields is None:
             # Use default fields based on documentation example
-            fields = 'No FederationCode FirstName LastName Gender Nationality ActiveBeach ActiveVolley PlaysBeach PlaysVolley TeamName Birthdate Height'
+            fields = """
+                No FederationCode FirstName LastName Gender 
+                Nationality ActiveBeach ActiveVolley 
+                PlaysBeach PlaysVolley TeamName Birthdate Height
+            """
         if no is None:
             request_type = 'GetPlayerList'
         else:
