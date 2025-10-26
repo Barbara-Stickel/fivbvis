@@ -10,6 +10,7 @@ class TournamentStatus(IntEnum):
     Open = 1
     Running = 6
     Finished = 7
+    PaymentPending = 8
     Paid = 9
     Cancelled = 10
     Unknown = -1
@@ -25,7 +26,7 @@ class TournamentStatus(IntEnum):
         return self in (TournamentStatus.Open, TournamentStatus.Running)
 
     def is_finished(self) -> bool:
-        return self in (TournamentStatus.Finished, TournamentStatus.Paid)
+        return self in (TournamentStatus.Finished, TournamentStatus.Paid, TournamentStatus.PaymentPending)
 
 class Gender(IntEnum):
     Men = 0
@@ -66,3 +67,18 @@ class BeachTournamentType(IntEnum):
 
     def is_pro_tour(self) -> bool:
         return self in (BeachTournamentType.Elite16, BeachTournamentType.Challenger, BeachTournamentType.Future)
+
+    def is_world_champ(self) -> bool:
+        return self in (BeachTournamentType.WorldChamp)
+    
+    def is_olympic_games(self) -> bool:
+        return self in (BeachTournamentType.OlympicGames)
+    
+    def is_elite16(self) -> bool:
+        return self in (BeachTournamentType.Elite16)
+    
+    def is_challenger(self) -> bool:
+        return self in (BeachTournamentType.Challenger)
+    
+    def is_future(self) -> bool:
+        return self in (BeachTournamentType.Future)

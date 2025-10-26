@@ -1,4 +1,7 @@
+import pandas as pd
+
 from .fivbvis import FivbVis
+
 
 class Article(FivbVis):
     def __init__(self):
@@ -38,8 +41,8 @@ class Beach(FivbVis):
     def getBeachTeam(self):
         raise NotImplementedError("Method not yet implemented")
 
-    def getBeachTeamList(self, no_tournament, plays_in_main_draw=False, fields=None, content_type='json'):
-        """Does the same as getBeachTournamentRanking method should be doing. It returns the ranking of all the teams for a given tournament.
+    def getBeachTournamentRanking(self, no_tournament, plays_in_main_draw=False, fields=None, content_type='json'):
+        """It returns the ranking of all the teams for a given tournament.
         If you want all the rankings, keep no_tournament to None.
 
         Parameters:       
@@ -102,10 +105,7 @@ class Beach(FivbVis):
         
         request_type = 'GetBeachTournamentList' if no is None else 'GetBeachTournament'
         return self.fivb_vis.get(request_type, fields=fields, content_type=content_type, no=no)
-
-    def getBeachTournamentRanking(self):
-        raise NotImplementedError("This method is not working anymore on VIS Web Service: https://www.fivb.org/VisSDK/VisWebService/RequestList.html")
-        
+ 
     def getBeachWorldTourRanking(self, gender, number, reference_date=None, fields=None, content_type='json'):
         raise NotImplementedError("This method is not working anymore on VIS Web Service: https://www.fivb.org/VisSDK/VisWebService/RequestList.html")
         
@@ -114,7 +114,7 @@ class Player(FivbVis):
     def __init__(self):
         self.fivb_vis = FivbVis()
 
-    def getPlayer(self, no, fields=None, content_type='json'):
+    def get_player_info(self, no, fields=None, content_type='json'):
         """Get player information.
         
         Parameters:
@@ -134,6 +134,10 @@ class Player(FivbVis):
             """
         request_type = 'GetPlayerList' if no is None else 'GetPlayer'
         return self.fivb_vis.get(request_type, fields=fields, content_type=content_type, no=no)
+
+    def get_player_list(self, fields=None):
+        df = pd.DataFrame(self.get_player_info(no=None, fields=fields, content_type='json')['data'])
+        return df
 
 class Volleyball(FivbVis):
     def __init__(self):
