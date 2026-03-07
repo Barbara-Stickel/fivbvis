@@ -22,6 +22,10 @@ class TournamentStatus(IntEnum):
             return cls.Unknown
         return super()._missing_(value)
 
+    def name_str(self) -> str:
+        """Return the human-readable name of the tournament status"""
+        return self.name
+
     def is_active(self) -> bool:
         return self in (TournamentStatus.Open, TournamentStatus.Running)
 
@@ -39,6 +43,10 @@ class Gender(IntEnum):
         if isinstance(value, int):
             return cls.Unknown
         return super()._missing_(value)
+    
+    def name_str(self) -> str:
+        """Return the human-readable name of the tournament status"""
+        return self.name
     
     def is_men(self) -> bool:
         return self in (Gender.Men)
@@ -64,6 +72,10 @@ class BeachTournamentType(IntEnum):
         if isinstance(value, int):
             return cls.Unknown
         return super()._missing_(value)
+
+    def name_str(self) -> str:
+        """Return the human-readable name of the tournament type"""
+        return self.name
 
     def is_pro_tour(self) -> bool:
         return self in (BeachTournamentType.Elite16, BeachTournamentType.Challenger, BeachTournamentType.Future)

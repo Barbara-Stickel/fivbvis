@@ -20,26 +20,11 @@ class Beach(FivbVis):
     def __init__(self):
         self.fivb_vis = FivbVis()
 
-    def getBeachMatch(self, no, fields=None, content_type='xml'):
+    def getBeachMatch(self, no, fields=None, content_type='json'):
         return self.fivb_vis.get('GetBeachMatch', fields=fields, content_type=content_type, no=no)
 
-    def getBeachMatchList(self, fields, filter=None, content_type='xml'):
+    def getBeachMatchList(self, fields, filter=None, content_type='json'):
         return self.fivb_vis.get_list('GetBeachMatchList', fields, filter, content_type)
-
-    def getBeachOlympicSelectionRanking(self):
-        raise NotImplementedError("Method not yet implemented")
-
-    def getBeachRound(self):
-        raise NotImplementedError("Method not yet implemented")
-
-    def getBeachRoundList(self):
-        raise NotImplementedError("Method not yet implemented")
-
-    def getBeachRoundRanking(self):
-        raise NotImplementedError("Method not yet implemented")
-
-    def getBeachTeam(self):
-        raise NotImplementedError("Method not yet implemented")
 
     def getBeachTournamentRanking(self, no_tournament, plays_in_main_draw=False, fields=None, content_type='json'):
         """It returns the ranking of all the teams for a given tournament.
@@ -77,6 +62,10 @@ class Beach(FivbVis):
         if no_tournament is not None:
             filters['no_tournament'] = no_tournament
         if plays_in_main_draw:
+            # In fivbvis, true returns the teams that play in the main draw,
+            # false returns the teams that play in the qualification
+            # and none returns all the teams that play in the tournament.
+            # Here we set the logic to have true = main draw and false = all teams.
             filters['plays_in_main_draw'] = 'true'
         
         filters = filters if filters else None
@@ -108,7 +97,21 @@ class Beach(FivbVis):
  
     def getBeachWorldTourRanking(self, gender, number, reference_date=None, fields=None, content_type='json'):
         raise NotImplementedError("This method is not working anymore on VIS Web Service: https://www.fivb.org/VisSDK/VisWebService/RequestList.html")
-        
+    
+    def getBeachOlympicSelectionRanking(self):
+        raise NotImplementedError("Method not yet implemented")
+
+    def getBeachRound(self):
+        raise NotImplementedError("Method not yet implemented")
+
+    def getBeachRoundList(self):
+        raise NotImplementedError("Method not yet implemented")
+
+    def getBeachRoundRanking(self):
+        raise NotImplementedError("Method not yet implemented")
+
+    def getBeachTeam(self):
+        raise NotImplementedError("Method not yet implemented")
         
 class Player(FivbVis):
     def __init__(self):
