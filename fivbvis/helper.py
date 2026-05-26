@@ -61,6 +61,11 @@ class BeachTournamentType(IntEnum):
     """
     WorldChamp = 4
     OlympicGames = 5
+    WorldTour5Star = 38
+    WorldTour4Star = 39
+    WorldTour3Star = 40
+    WorldTour2Star = 41
+    WorldTour1Star = 42
     Elite16 = 51
     Challenger = 52
     Future = 53
@@ -78,7 +83,18 @@ class BeachTournamentType(IntEnum):
         return self.name
 
     def is_pro_tour(self) -> bool:
-        return self in (BeachTournamentType.Elite16, BeachTournamentType.Challenger, BeachTournamentType.Future)
+        return self in (
+            BeachTournamentType.Elite16,
+            BeachTournamentType.Challenger,
+            BeachTournamentType.Future,
+            BeachTournamentType.WorldTour5Star,
+            BeachTournamentType.WorldTour4Star,
+            BeachTournamentType.WorldTour3Star,
+            BeachTournamentType.WorldTour2Star,
+            BeachTournamentType.WorldTour1Star,
+            BeachTournamentType.WorldChamp,
+            BeachTournamentType.OlympicGames
+        )
 
     def is_world_champ(self) -> bool:
         return self in (BeachTournamentType.WorldChamp)
