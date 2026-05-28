@@ -61,7 +61,7 @@ class BeachTournamentType(IntEnum):
     """
     GrandSlam = 0
     Open = 1
-    Challenger = 2
+    # Challenger = 2
     WorldSeries = 3
     WorldChamp = 4
     OlympicGames = 5
